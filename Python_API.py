@@ -1,6 +1,5 @@
 from fastapi import FastAPI, Request, Form
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import RedirectResponse
 from datetime import datetime
 import json
 import time
@@ -70,7 +69,7 @@ async def track_event(event: dict):
 async def health_check():
     return {"status": "UP", "time": datetime.utcnow().isoformat()}
 
-# ➡️ Contact form submission (with redirect)
+# ➡️ Contact form submission (just returns success for JS alert)
 @app.post("/contact")
 async def contact_form(
     name: str = Form(...),
@@ -86,5 +85,5 @@ async def contact_form(
     with open(contact_file, "a") as f:
         f.write(json.dumps(submission) + "\n")
 
-    # ✅ Redirect back to website contact page after successful submit
-    return RedirectResponse(url="http://52.170.6.111/contact.html", status_code=303)
+    # ✅ NO redirect → just JSON success for JavaScript to capture
+    return {"status": "success", "message": "Message received!"}
